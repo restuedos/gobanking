@@ -12,11 +12,9 @@ import (
 func Setup(e *echo.Echo, db *gorm.DB, cfg *config.Config) {
 	// Setup middleware
 	middleware.SetupMiddleware(e, cfg)
-
-	// Setup handlers
+	// Protected routes
 	nasabahHandler := handler.NewNasabahHandler(db, cfg)
 
-	// Routes
 	e.POST("/daftar", nasabahHandler.Daftar)
 	e.POST("/tabung", nasabahHandler.Tabung)
 	e.POST("/tarik", nasabahHandler.Tarik)

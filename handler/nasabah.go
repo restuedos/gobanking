@@ -30,6 +30,17 @@ func generateNoRekening() string {
 	return fmt.Sprintf("%010d", rand.Intn(9000000000)+1000000000)
 }
 
+// @Summary Register new customer
+// @Description Register a new bank customer with their personal information
+// @Tags nasabah
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param request body model.DaftarRequest true "Customer registration details"
+// @Success 200 {object} model.RekeningResponse
+// @Failure 400 {object} model.ErrorResponse
+// @Failure 401 {object} model.ErrorResponse
+// @Router /daftar [post]
 func (h *NasabahHandler) Daftar(c echo.Context) error {
 	var req model.DaftarRequest
 	if err := c.Bind(&req); err != nil {
@@ -73,6 +84,17 @@ func (h *NasabahHandler) Daftar(c echo.Context) error {
 	return c.JSON(http.StatusOK, model.RekeningResponse{NoRekening: nasabah.NoRekening})
 }
 
+// @Summary Deposit money
+// @Description Deposit money into a customer's account
+// @Tags nasabah
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param request body model.TransaksiRequest true "Deposit details"
+// @Success 200 {object} model.SaldoResponse
+// @Failure 400 {object} model.ErrorResponse
+// @Failure 401 {object} model.ErrorResponse
+// @Router /tabung [post]
 func (h *NasabahHandler) Tabung(c echo.Context) error {
 	var req model.TransaksiRequest
 	if err := c.Bind(&req); err != nil {
@@ -108,6 +130,17 @@ func (h *NasabahHandler) Tabung(c echo.Context) error {
 	return c.JSON(http.StatusOK, model.SaldoResponse{Saldo: nasabah.Saldo})
 }
 
+// @Summary Withdraw money
+// @Description Withdraw money from a customer's account
+// @Tags nasabah
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param request body model.TransaksiRequest true "Withdrawal details"
+// @Success 200 {object} model.SaldoResponse
+// @Failure 400 {object} model.ErrorResponse
+// @Failure 401 {object} model.ErrorResponse
+// @Router /tarik [post]
 func (h *NasabahHandler) Tarik(c echo.Context) error {
 	var req model.TransaksiRequest
 	if err := c.Bind(&req); err != nil {
@@ -152,6 +185,17 @@ func (h *NasabahHandler) Tarik(c echo.Context) error {
 	return c.JSON(http.StatusOK, model.SaldoResponse{Saldo: nasabah.Saldo})
 }
 
+// @Summary Check balance
+// @Description Get the current balance for a given account number
+// @Tags nasabah
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param no_rekening path string true "Account number"
+// @Success 200 {object} model.SaldoResponse
+// @Failure 400 {object} model.ErrorResponse
+// @Failure 401 {object} model.ErrorResponse
+// @Router /saldo/{no_rekening} [get]
 func (h *NasabahHandler) Saldo(c echo.Context) error {
 	noRekening := c.Param("no_rekening")
 

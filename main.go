@@ -4,12 +4,34 @@ import (
 	"fmt"
 	"gobanking/config"
 	"gobanking/database"
+	_ "gobanking/docs"
 	"gobanking/model"
 	"gobanking/router"
 
 	"github.com/labstack/echo/v4"
+	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
+// @title Banking API
+// @version 1.0
+// @description This is a banking service API with authentication.
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name API Support
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host localhost:3000
+// @BasePath /
+// @schemes http
+
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+// @description JWT Bearer authentication
 func main() {
 	// Load configuration
 	cfg := config.Load()
@@ -28,6 +50,9 @@ func main() {
 
 	// Echo instance
 	e := echo.New()
+
+	// Swagger documentation
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	// Setup routes
 	router.Setup(e, db, cfg)

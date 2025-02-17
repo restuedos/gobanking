@@ -1,0 +1,190 @@
+basePath: /
+definitions:
+  model.DaftarRequest:
+    properties:
+      nama:
+        type: string
+      nik:
+        type: string
+      no_hp:
+        type: string
+    required:
+    - nama
+    - nik
+    - no_hp
+    type: object
+  model.ErrorResponse:
+    properties:
+      remark:
+        type: string
+    type: object
+  model.RekeningResponse:
+    properties:
+      no_rekening:
+        type: string
+    type: object
+  model.SaldoResponse:
+    properties:
+      saldo:
+        type: number
+    type: object
+  model.TransaksiRequest:
+    properties:
+      no_rekening:
+        type: string
+      nominal:
+        type: number
+    required:
+    - no_rekening
+    - nominal
+    type: object
+host: localhost:3000
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a banking service API with authentication.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Banking API
+  version: "1.0"
+paths:
+  /daftar:
+    post:
+      consumes:
+      - application/json
+      description: Register a new bank customer with their personal information
+      parameters:
+      - description: Customer registration details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.DaftarRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.RekeningResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Register new customer
+      tags:
+      - nasabah
+  /saldo/{no_rekening}:
+    get:
+      consumes:
+      - application/json
+      description: Get the current balance for a given account number
+      parameters:
+      - description: Account number
+        in: path
+        name: no_rekening
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SaldoResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Check balance
+      tags:
+      - nasabah
+  /tabung:
+    post:
+      consumes:
+      - application/json
+      description: Deposit money into a customer's account
+      parameters:
+      - description: Deposit details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.TransaksiRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SaldoResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Deposit money
+      tags:
+      - nasabah
+  /tarik:
+    post:
+      consumes:
+      - application/json
+      description: Withdraw money from a customer's account
+      parameters:
+      - description: Withdrawal details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.TransaksiRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SaldoResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/model.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Withdraw money
+      tags:
+      - nasabah
+schemes:
+- http
+securityDefinitions:
+  BearerAuth:
+    description: JWT Bearer authentication
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

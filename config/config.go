@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 type Config struct {
@@ -27,6 +29,13 @@ type DatabaseConfig struct {
 }
 
 func Load() *Config {
+	// Load environment variables from .env file
+	if err := godotenv.Load(); err != nil {
+		// If .env file doesn't exist, continue without it
+		// This is normal in production environments where env vars are set differently
+		slog.Warn("No .env file found")
+	}
+
 	// Setup structured logging
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
 		Level: slog.LevelInfo,
