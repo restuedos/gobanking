@@ -43,7 +43,7 @@ func main() {
 	}
 
 	// Auto migrate the schema
-	if err := db.AutoMigrate(&model.Nasabah{}); err != nil {
+	if err := db.AutoMigrate(&model.Nasabah{}, &model.User{}); err != nil {
 		cfg.Logger.Error("gagal migrasi database", "error", err)
 		panic("gagal migrasi database")
 	}

@@ -12,6 +12,7 @@ import (
 type Config struct {
 	Server   ServerConfig
 	Database DatabaseConfig
+	JWT      JWTConfig
 	Logger   *slog.Logger
 }
 
@@ -26,6 +27,10 @@ type DatabaseConfig struct {
 	User     string
 	Password string
 	Name     string
+}
+
+type JWTConfig struct {
+	Secret string
 }
 
 func Load() *Config {
@@ -58,6 +63,9 @@ func Load() *Config {
 			User:     os.Getenv("DB_USER"),
 			Password: os.Getenv("DB_PASSWORD"),
 			Name:     os.Getenv("DB_NAME"),
+		},
+		JWT: JWTConfig{
+			Secret: os.Getenv("JWT_SECRET"),
 		},
 		Logger: logger,
 	}

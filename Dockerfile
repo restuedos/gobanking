@@ -1,12 +1,15 @@
-FROM golang:1.21-alpine
+FROM golang:1.24-alpine
 
 WORKDIR /app
+
+# Install air
+RUN go install github.com/air-verse/air@latest
 
 # Install swag
 RUN go install github.com/swaggo/swag/cmd/swag@latest
 
 # Copy go mod and sum files
-COPY go.mod ./
+COPY go.mod go.sum ./
 
 # Download all dependencies
 RUN go mod download
@@ -24,4 +27,4 @@ RUN go build -o main .
 EXPOSE 3000
 
 # Command to run the executable
-CMD ["./main"]
+CMD ["air", "-c", ".air.toml"]
